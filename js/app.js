@@ -1,9 +1,49 @@
 
 //constructor
-function seguro(marca, anio, tipo){
+function Seguro(marca, anio, tipo){
     this.marca = marca;
     this.anio = anio;
     this.tipo = tipo;
+}
+
+//prototipo de seguro
+Seguro.prototype.cotizarSeguro = function(){
+    /* 1 = americano 1.15
+    2= asiatico 1.05
+    3 = europeo 1.35 */
+
+    let cantidad;
+    const base = 2000;
+
+    switch(this.marca){
+        case'1':
+            cantidad = base * 1.15;
+            break;
+        case '2':
+            cantidad = base * 1.05;
+            break;
+        case '3':
+            cantidad = base * 1.35;
+            break;
+    }
+    
+
+    //leer año y hacer operacion
+    const diferencia = new Date().getFullYear() - this.anio;
+
+    cantidad -= (diferencia * 3)* cantidad / 100;
+
+    
+    
+    //comparar con el tipo
+    if(this.tipo ==='basico'){
+        cantidad *=1.30;
+    }else{
+        cantidad*= 1.50;
+    }
+
+    console.log(cantidad);
+
 }
 
 
@@ -63,11 +103,13 @@ formulario.addEventListener('submit', function(e){
     const tipo = document.querySelector('input[name="tipo"]:checked').value;
 
     const interfaz = new Interfaz();
+    
     //validamos que no este vacio nada 
     if(marcaSeleccionada === '' || anioSeleccionado ==='' || tipo ===''){
         interfaz.mostrarError('Faltsan datos, revisa el formulario', 'error');
     }else{
-        console.log("ahora si");
+        const seguro   = new Seguro(marcaSeleccionada, anioSeleccionado, tipo);
+        seguro.cotizarSeguro();
     }
 
     
