@@ -42,8 +42,8 @@ Seguro.prototype.cotizarSeguro = function(){
         cantidad*= 1.50;
     }
 
-    console.log(cantidad);
-
+  
+    return cantidad;
 }
 
 
@@ -70,6 +70,50 @@ Interfaz.prototype.mostrarError = function(mensaje, tipo){
     },3000);
 }
 
+Interfaz.prototype.motrarResultado = function(seguro, total){
+    let marca;
+    const resultado = document.querySelector("#resultado");
+
+    const div1 = document.createElement('div');
+
+    switch(seguro.marca){
+        case '1':
+                marca = "AMERICANO";
+            break;
+        case '2':
+                marca = "ASIATICO";
+            break;
+        case '3':
+                marca = "EUROPEO";
+            break;
+    }
+    console.log(marca);
+
+    //mostrar spinner
+    const spinner = document.querySelector("img");
+
+    
+
+    div1.innerHTML =`
+        <p>Marca:${marca}</p>
+        <p>Año:${seguro.anio}</p>
+        <p>Tipo:${seguro.tipo}</p>
+        <p>Precio: $${total}</p>
+    
+    `;
+    spinner.style.display = 'block';
+
+    setTimeout(function(){
+        spinner.style.display = 'none';
+
+        resultado.appendChild(div1);
+    },1500);
+
+    
+
+    
+}
+
 
 
 
@@ -94,6 +138,12 @@ const formulario = document.querySelector("#cotizar-seguro");
 
 formulario.addEventListener('submit', function(e){
     e.preventDefault();
+    //eliminamos el contenido del div del resultado
+    let limpiarResult = document.querySelector("#resultado");
+    while (limpiarResult.firstChild) {
+        limpiarResult.removeChild(limpiarResult.firstChild);
+    }
+
     //let datos del select marca
     const marca = document.querySelector("#marca");
     const marcaSeleccionada = marca.options[marca.selectedIndex].value;
@@ -109,7 +159,10 @@ formulario.addEventListener('submit', function(e){
         interfaz.mostrarError('Faltsan datos, revisa el formulario', 'error');
     }else{
         const seguro   = new Seguro(marcaSeleccionada, anioSeleccionado, tipo);
-        seguro.cotizarSeguro();
+        const cantidad = seguro.cotizarSeguro();
+
+        //enviamos a la interfaz
+        interfaz.motrarResultado(seguro,cantidad);
     }
 
     
