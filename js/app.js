@@ -52,7 +52,7 @@ Seguro.prototype.cotizarSeguro = function(){
 function Interfaz(){
 
 }
-Interfaz.prototype.mostrarError = function(mensaje, tipo){
+Interfaz.prototype.mostrarMensaje = function(mensaje, tipo){
     const div = document.createElement('div');
     if(tipo == 'error'){
         div.classList.add('mensaje', 'error');
@@ -67,7 +67,7 @@ Interfaz.prototype.mostrarError = function(mensaje, tipo){
     //despues de 3 segundo quitar el mensaje
     setTimeout(function(){
         document.querySelector(".mensaje").remove();
-    },3000);
+    },2000);
 }
 
 Interfaz.prototype.motrarResultado = function(seguro, total){
@@ -95,6 +95,7 @@ Interfaz.prototype.motrarResultado = function(seguro, total){
     
 
     div1.innerHTML =`
+    <p class="header">Resumen</p>
         <p>Marca:${marca}</p>
         <p>Año:${seguro.anio}</p>
         <p>Tipo:${seguro.tipo}</p>
@@ -107,7 +108,7 @@ Interfaz.prototype.motrarResultado = function(seguro, total){
         spinner.style.display = 'none';
 
         resultado.appendChild(div1);
-    },1500);
+    },2000);
 
     
 
@@ -156,10 +157,11 @@ formulario.addEventListener('submit', function(e){
     
     //validamos que no este vacio nada 
     if(marcaSeleccionada === '' || anioSeleccionado ==='' || tipo ===''){
-        interfaz.mostrarError('Faltsan datos, revisa el formulario', 'error');
+        interfaz.mostrarMensaje('Faltsan datos, revisa el formulario', 'error');
     }else{
         const seguro   = new Seguro(marcaSeleccionada, anioSeleccionado, tipo);
         const cantidad = seguro.cotizarSeguro();
+        interfaz.mostrarMensaje('Cotizando...', 'correcto');
 
         //enviamos a la interfaz
         interfaz.motrarResultado(seguro,cantidad);
